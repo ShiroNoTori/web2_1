@@ -1,8 +1,8 @@
 package service;
 
 import model.User;
-import service.dao.UserDao;
-import service.impl.UserDaoImpl;
+import dao.UserDao;
+import dao.impl.UserDaoImpl;
 import util.JDBCUtil;
 
 import java.util.List;

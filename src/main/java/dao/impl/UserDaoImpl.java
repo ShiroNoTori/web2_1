@@ -1,7 +1,7 @@
-package service.impl;
+package dao.impl;
 
 import model.User;
-import service.dao.UserDao;
+import dao.UserDao;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
