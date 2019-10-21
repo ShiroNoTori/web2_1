@@ -13,6 +13,7 @@ import java.io.IOException;
 
 @WebServlet("/userAdd")
 public class AddServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/userAdd.jsp");
@@ -28,7 +29,6 @@ public class AddServlet extends HttpServlet {
         User user = new User(name, password, login);
 
         UserService service = new UserService();
-
         service.add(user);
 
         response.sendRedirect("/_web_war_exploded/");
