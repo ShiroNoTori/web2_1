@@ -28,7 +28,7 @@ public class AddServlet extends HttpServlet {
 
         User user = new User(name, password, login);
 
-        UserService service = new UserService();
+        UserService service = UserService.getInstance();
         service.add(user);
 
         response.sendRedirect("/_web_war_exploded/");

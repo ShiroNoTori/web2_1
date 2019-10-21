@@ -15,4 +15,6 @@ public interface UserDao {
     boolean add(User user);
 
     boolean update(User user);
+
+    boolean hasId(int id);
 }

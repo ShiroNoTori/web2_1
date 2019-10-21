@@ -17,7 +17,7 @@ public class IndexServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserService service = new UserService();
+        UserService service = UserService.getInstance();
 
         List<User> userList = service.getAll();
         request.setAttribute("userList", userList);

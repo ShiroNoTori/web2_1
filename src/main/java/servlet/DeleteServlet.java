@@ -16,8 +16,10 @@ public class DeleteServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
 
-        UserService service = new UserService();
-        service.remove(id);
+        UserService service = UserService.getInstance();
+        if (service.hasId(id)) {
+            service.remove(id);
+        }
 
         response.sendRedirect("/_web_war_exploded/");
     }

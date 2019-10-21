@@ -17,12 +17,14 @@ public class UpdateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        UserService service = new UserService();
-        User user = service.getById(id);
+        UserService service = UserService.getInstance();
 
-        request.setAttribute("user", user);
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/userUpdate.jsp");
-        dispatcher.forward(request, response);
+        if (service.hasId(id)) {
+            User user = service.getById(id);
+            request.setAttribute("user", user);
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/userUpdate.jsp");
+            dispatcher.forward(request, response);
+        }
     }
 
     @Override
@@ -31,7 +33,7 @@ public class UpdateServlet extends HttpServlet {
         String name = request.getParameter("name");
         String password = request.getParameter("password");
 
-        UserService service = new UserService();
+        UserService service = UserService.getInstance();
 
         User user = service.getById(id);
         user.setName(name);

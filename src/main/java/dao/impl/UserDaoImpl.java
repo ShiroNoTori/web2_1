@@ -2,59 +2,74 @@ package dao.impl;
 
 import model.User;
 import dao.UserDao;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
 
-    private EntityManager em;
+    private Session session;
 
-    public UserDaoImpl(EntityManager em) {
-        this.em = em;
+    public UserDaoImpl(Session session) {
+        this.session = session;
     }
 
     public User getById(int id) {
-        return em.find(User.class, id);
+        User user = session.find(User.class, id);
+        session.close();
+        return user;
     }
 
     public List<User> getAll() {
-        Query query = em.createQuery("from User");
-        return query.getResultList();
+        Query query = session.createQuery("from User");
+        List<User> list = query.getResultList();
+        session.close();
+        return list;
     }
 
     public boolean remove(int id) {
-        em.getTransaction().begin();
-        Query query = em.createQuery("delete from User where id = :id");
+        session.getTransaction().begin();
+        Query query = session.createQuery("delete from User where id = :id");
         query.setParameter("id", id);
         int deleteNum = query.executeUpdate();
-        em.getTransaction().commit();
+        session.getTransaction().commit();
+        session.close();
         return deleteNum == 1;
     }
 
     public boolean add(User user) {
+        Transaction tr = session.beginTransaction();
+        boolean committed = false;
         try {
-            em.getTransaction().begin();
-            em.persist(user);
-            em.getTransaction().commit();
+            session.save(user);
+            tr.commit();
         } catch (Exception e) {
-            em.getTransaction().rollback();
-            return false;
+            tr.rollback();
         }
-        return true;
+        committed = tr.getStatus() == TransactionStatus.COMMITTED;
+        session.close();
+        return committed;
     }
 
     public boolean update(User user) {
-        try {
-            em.getTransaction().begin();
-            em.merge(user);
-            em.getTransaction().commit();
-        } catch (EntityExistsException e) {
-            em.getTransaction().rollback();
-            return false;
-        }
-        return true;
+        Transaction tr = session.beginTransaction();
+        boolean committed = false;
+        session.update(user);
+        tr.commit();
+        committed = tr.getStatus() == TransactionStatus.COMMITTED;
+        session.close();
+        return committed;
+    }
+
+    @Override
+    public boolean hasId(int id) {
+        Query query = session.createQuery("from User where id = :id");
+        query.setParameter("id", id);
+        boolean hasResult = query.getSingleResult() != null;
+        session.close();
+        return hasResult;
     }
 }
