@@ -1,8 +1,8 @@
 package service;
 
+import dao.UserDao;
 import model.User;
 import dao.impl.UserDaoImpl;
-import org.hibernate.SessionFactory;
 import util.DBHelper;
 
 import java.util.List;
@@ -11,40 +11,42 @@ public class UserService {
 
     private static UserService instance;
 
-    private SessionFactory sessionFactory;
+    private static UserDao getUserDAO() {
+        return new UserDaoImpl(DBHelper.getMysqlConnection());
+    }
 
-    private UserService(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    private UserService() {
+
     }
 
     public static UserService getInstance() {
         if(instance == null) {
-            instance = new UserService(DBHelper.getSessionFactory());
+            instance = new UserService();
         }
         return instance;
     }
 
     public User getById(int id) {
-        return new UserDaoImpl(sessionFactory.openSession()).getById(id);
+        return getUserDAO().getById(id);
     }
 
     public List<User> getAll() {
-        return new UserDaoImpl(sessionFactory.openSession()).getAll();
+        return getUserDAO().getAll();
     }
 
     public boolean remove(int id) {
-        return new UserDaoImpl(sessionFactory.openSession()).remove(id);
+        return getUserDAO().remove(id);
     }
 
     public boolean add(User user) {
-        return new UserDaoImpl(sessionFactory.openSession()).add(user);
+        return getUserDAO().add(user);
     }
 
     public boolean update(User user) {
-        return new UserDaoImpl(sessionFactory.openSession()).update(user);
+        return getUserDAO().update(user);
     }
 
     public boolean hasId(int id) {
-        return new UserDaoImpl(sessionFactory.openSession()).hasId(id);
+        return getUserDAO().hasId(id);
     }
 }

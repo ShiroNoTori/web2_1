@@ -1,75 +1,123 @@
 package dao.impl;
 
-import model.User;
 import dao.UserDao;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
+import model.User;
 
-import javax.persistence.Query;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoImpl implements UserDao {
 
-    private Session session;
+    private Connection connection;
 
-    public UserDaoImpl(Session session) {
-        this.session = session;
+    public UserDaoImpl(Connection connection) {
+        this.connection = connection;
     }
 
     public User getById(int id) {
-        User user = session.find(User.class, id);
-        session.close();
+        User user = null;
+
+        try (PreparedStatement statement = connection.prepareStatement("select id, login, name, password from user where id = ?")) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            resultSet.next();
+
+            user = new User(
+                    resultSet.getString("name"),
+                    resultSet.getString("password"),
+                    resultSet.getString("login")
+            );
+            user.setId(resultSet.getInt("id"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return user;
     }
 
     public List<User> getAll() {
-        Query query = session.createQuery("from User");
-        List<User> list = query.getResultList();
-        session.close();
+        List<User> list = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement("select * from user")) {
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                User user = new User(
+                        resultSet.getString("name"),
+                        resultSet.getString("password"),
+                        resultSet.getString("login")
+                );
+                user.setId(resultSet.getInt("id"));
+
+                list.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return list;
     }
 
     public boolean remove(int id) {
-        session.getTransaction().begin();
-        Query query = session.createQuery("delete from User where id = :id");
-        query.setParameter("id", id);
-        int deleteNum = query.executeUpdate();
-        session.getTransaction().commit();
-        session.close();
-        return deleteNum == 1;
+        int rowsUpdated = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement("delete from user where id = ?")) {
+            statement.setInt(1, id);
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rowsUpdated == 1;
     }
 
     public boolean add(User user) {
-        Transaction tr = session.beginTransaction();
-        boolean committed = false;
-        try {
-            session.save(user);
-            tr.commit();
-        } catch (Exception e) {
-            tr.rollback();
+        int rowsAdded = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement("insert into user (login, name, password) values (?, ?, ?)")) {
+            statement.setString(1, user.getLogin());
+            statement.setString(2, user.getName());
+            statement.setString(3, user.getPassword());
+            rowsAdded = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        committed = tr.getStatus() == TransactionStatus.COMMITTED;
-        session.close();
-        return committed;
+
+        return rowsAdded == 1;
     }
 
     public boolean update(User user) {
-        Transaction tr = session.beginTransaction();
-        boolean committed = false;
-        session.update(user);
-        tr.commit();
-        committed = tr.getStatus() == TransactionStatus.COMMITTED;
-        session.close();
-        return committed;
+        int rowsUpdated = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement("update user set name = ?, password = ? where id = ?")) {
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getPassword());
+            statement.setInt(3, user.getId());
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rowsUpdated == 1;
     }
 
     @Override
     public boolean hasId(int id) {
-        Query query = session.createQuery("from User where id = :id");
-        query.setParameter("id", id);
-        boolean hasResult = query.getSingleResult() != null;
-        session.close();
-        return hasResult;
+        boolean found = false;
+
+        try (PreparedStatement statement = connection.prepareStatement("select id from user where id = ?")) {
+            statement.setInt(1, id);
+            found = statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return found;
     }
 }
