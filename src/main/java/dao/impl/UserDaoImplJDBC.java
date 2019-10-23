@@ -10,11 +10,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDaoImpl implements UserDao {
+public class UserDaoImplJDBC implements UserDao {
 
     private Connection connection;
 
-    public UserDaoImpl(Connection connection) {
+    public UserDaoImplJDBC(Connection connection) {
         this.connection = connection;
     }
 
