@@ -1,5 +1,7 @@
 package dao.factory;
 
+import dao.UserDao;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -9,7 +11,14 @@ public class UserDaoFactoryProducer {
     public static UserDaoFactory getFactory(String route) {
         String dao = parseProperty(route);
 
-        switch (dao) {
+        try {
+            Class<?> clazz = Class.forName(dao);
+            return (UserDaoFactory) clazz.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        /*switch (dao) {
             case "jdbc": {
                 return new UserDaoFactoryJDBC();
             }
@@ -19,7 +28,7 @@ public class UserDaoFactoryProducer {
             default: {
                 throw new RuntimeException("DAO factory not found.");
             }
-        }
+        }*/
     }
 
     private static String parseProperty(String route) {
