@@ -2,6 +2,7 @@ package dao.impl;
 
 import dao.UserDao;
 import model.User;
+import util.DBHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,8 +15,8 @@ public class UserDaoImplJDBC implements UserDao {
 
     private Connection connection;
 
-    public UserDaoImplJDBC(Connection connection) {
-        this.connection = connection;
+    public UserDaoImplJDBC(DBHelper helper) {
+        this.connection = helper.getConnection();
     }
 
     public User getById(int id) {

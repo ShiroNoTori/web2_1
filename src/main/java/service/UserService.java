@@ -1,10 +1,9 @@
 package service;
 
 import dao.UserDao;
-import dao.impl.UserDaoImplHibernate;
-import dao.impl.UserDaoImplJDBC;
+import dao.factory.UserDaoFactory;
+import dao.factory.UserDaoFactoryProducer;
 import model.User;
-import util.DBHelper;
 
 import java.util.List;
 
@@ -12,12 +11,13 @@ public class UserService {
 
     private static UserService instance;
 
-    private UserDao getUserDAO() {
-        return new UserDaoImplJDBC(DBHelper.getMysqlConnection());
-        //return new UserDaoImplHibernate(DBHelper.getSessionFactory().openSession());
-    }
+    private UserDaoFactory daoFactory = UserDaoFactoryProducer.getFactory("dao.properties");
 
     private UserService() {
+    }
+
+    private UserDao getUserDAO() {
+        return daoFactory.createUserDao();
     }
 
     public static UserService getInstance() {

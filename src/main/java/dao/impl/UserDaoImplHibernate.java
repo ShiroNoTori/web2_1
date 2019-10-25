@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+import util.DBHelper;
+import util.HibernateUtility;
 
 import java.util.List;
 
@@ -13,8 +15,8 @@ public class UserDaoImplHibernate implements UserDao {
 
     private Session session;
 
-    public UserDaoImplHibernate(Session session) {
-        this.session = session;
+    public UserDaoImplHibernate(DBHelper helper) {
+        this.session = HibernateUtility.getSessionFactory(helper.getConfiguration()).openSession();
     }
 
     @Override

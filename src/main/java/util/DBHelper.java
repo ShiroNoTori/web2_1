@@ -14,39 +14,20 @@ import java.sql.SQLException;
 
 public class DBHelper {
 
-    private static SessionFactory sessionFactory;
+    private static DBHelper instance;
 
-    public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            sessionFactory = createSessionFactory();
+    private DBHelper() {
+
+    }
+
+    public static DBHelper getInstance() {
+        if (instance == null) {
+            instance = new DBHelper();
         }
-        return sessionFactory;
+        return instance;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    private static Configuration getMySqlConfiguration() {
-        Configuration configuration = new Configuration();
-        configuration.addAnnotatedClass(User.class);
-
-        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
-        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/db_example?serverTimezone=UTC");
-        configuration.setProperty("hibernate.connection.username", "root");
-        configuration.setProperty("hibernate.connection.password", "1Vectorcontrol");
-        configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "create");
-        return configuration;
-    }
-
-    private static SessionFactory createSessionFactory() {
-        Configuration configuration = getMySqlConfiguration();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
-        builder.applySettings(configuration.getProperties());
-        ServiceRegistry serviceRegistry = builder.build();
-        return configuration.buildSessionFactory(serviceRegistry);
-    }
-
-    public static Connection getMysqlConnection() {
+    public Connection getConnection() {
         try {
             //com.mysql.cj.jdbc.Driver
             DriverManager.registerDriver((Driver) Class.forName("com.mysql.jdbc.Driver").newInstance());
@@ -68,4 +49,34 @@ public class DBHelper {
             throw new IllegalStateException();
         }
     }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public Configuration getConfiguration() {
+        Configuration configuration = new Configuration();
+        configuration.addAnnotatedClass(User.class);
+
+        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/db_example?serverTimezone=UTC");
+        configuration.setProperty("hibernate.connection.username", "root");
+        configuration.setProperty("hibernate.connection.password", "1Vectorcontrol");
+        configuration.setProperty("hibernate.show_sql", "true");
+        configuration.setProperty("hibernate.hbm2ddl.auto", "create");
+        return configuration;
+    }
+
+    /*public SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            sessionFactory = createSessionFactory();
+        }
+        return sessionFactory;
+    }
+
+    private SessionFactory createSessionFactory() {
+        Configuration configuration = getConfiguration();
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+        builder.applySettings(configuration.getProperties());
+        ServiceRegistry serviceRegistry = builder.build();
+        return configuration.buildSessionFactory(serviceRegistry);
+    }*/
 }
