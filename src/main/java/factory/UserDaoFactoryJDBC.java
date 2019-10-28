@@ -1,4 +1,4 @@
-package dao.factory;
+package factory;
 
 import dao.UserDao;
 import dao.impl.UserDaoImplJDBC;

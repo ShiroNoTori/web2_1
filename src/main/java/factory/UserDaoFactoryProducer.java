@@ -1,6 +1,4 @@
-package dao.factory;
-
-import dao.UserDao;
+package factory;
 
 import java.io.IOException;
 import java.io.InputStream;
