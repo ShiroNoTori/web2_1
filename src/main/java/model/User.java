@@ -9,6 +9,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    String role;
     String name;
     String password;
 
@@ -19,10 +20,15 @@ public class User {
 
     }
 
-    public User(String name, String password, String login) {
+    public User(String role, String name, String password, String login) {
+        this.role = role;
         this.name = name;
         this.password = password;
         this.login = login;
+    }
+
+    public String getRole() {
+        return role;
     }
 
     public int getId() {
@@ -39,6 +45,10 @@ public class User {
 
     public String getLogin() {
         return login;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setId(int id) {

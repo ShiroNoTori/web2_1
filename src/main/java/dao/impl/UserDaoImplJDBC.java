@@ -22,13 +22,14 @@ public class UserDaoImplJDBC implements UserDao {
     public User getById(int id) {
         User user = null;
 
-        try (PreparedStatement statement = connection.prepareStatement("select id, login, name, password from user where id = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("select * from user where id = ?")) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
 
             resultSet.next();
 
             user = new User(
+                    resultSet.getString("role"),
                     resultSet.getString("name"),
                     resultSet.getString("password"),
                     resultSet.getString("login")
@@ -50,6 +51,7 @@ public class UserDaoImplJDBC implements UserDao {
 
             while (resultSet.next()) {
                 User user = new User(
+                        resultSet.getString("role"),
                         resultSet.getString("name"),
                         resultSet.getString("password"),
                         resultSet.getString("login")
@@ -120,5 +122,22 @@ public class UserDaoImplJDBC implements UserDao {
         }
 
         return found;
+    }
+
+    @Override
+    public String getRole(String login, String password) {
+        String role = null;
+        try (PreparedStatement statement = connection.prepareStatement("select role from user where login = ? and password = ?")) {
+            statement.setString(1, login);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+
+            resultSet.next();
+            role = resultSet.getString("role");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return role;
     }
 }

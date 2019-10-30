@@ -9,6 +9,7 @@ import org.hibernate.resource.transaction.spi.TransactionStatus;
 import util.DBHelper;
 import util.HibernateUtility;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class UserDaoImplHibernate implements UserDao {
@@ -78,5 +79,22 @@ public class UserDaoImplHibernate implements UserDao {
         boolean hasResult = query.getSingleResult() != null;
         session.close();
         return hasResult;
+    }
+
+    @Override
+    public String getRole(String login, String password) {
+        String role = null;
+
+        Query query = session.createQuery("select role from User u where login =:login and password =:password");
+        query.setParameter("login", login);
+        query.setParameter("password", password);
+
+        try {
+            role = (String) query.getSingleResult();
+        } catch (NoResultException ignored) {
+        }
+
+        session.close();
+        return role;
     }
 }

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/userAdd")
+@WebServlet("/admin/userAdd")
 public class AddServlet extends HttpServlet {
 
     @Override
@@ -26,11 +26,11 @@ public class AddServlet extends HttpServlet {
         String name = request.getParameter("name");
         String password = request.getParameter("password");
 
-        User user = new User(name, password, login);
+        User user = new User("user", name, password, login);
 
         UserService service = UserService.getInstance();
         service.add(user);
 
-        response.sendRedirect("/_web_war_exploded/");
+        response.sendRedirect("/admin");
     }
 }

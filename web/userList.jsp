@@ -7,16 +7,17 @@
 <body>
 
 <div style="width: 80%;" align="center">
-<a href="/_web_war_exploded/userAdd">Add new user</a>
+<a href="/admin/userAdd">Add new user</a>
 <br>
 
 <table border="1" width="80%">
     <tbody>
     <tr>
         <td width="10%">id</td>
-        <td width="23%">login</td>
-        <td width="23%">name</td>
-        <td width="23%">password</td>
+        <td width="20%">login</td>
+        <td width="20%">name</td>
+        <td width="20%">password</td>
+        <td width="10%">role</td>
         <td width="10%">update</td>
         <td width="10%">delete</td>
     </tr>
@@ -27,13 +28,14 @@
             <td>${user.getLogin()}</td>
             <td>${user.getName()}</td>
             <td>${user.getPassword()}</td>
+            <td>${user.getRole()}</td>
             <td>
-                <a href="/_web_war_exploded/userUpdate?id=${user.getId()}">
+                <a href="/admin/userUpdate?id=${user.getId()}">
                     <input type="button" value="update" style="width: 100%; height: 100%;">
                 </a>
             </td>
             <td>
-                <a href="/_web_war_exploded/userDelete?id=${user.getId()}">
+                <a href="/admin/userDelete?id=${user.getId()}">
                     <input type="button" value="delete" style="width: 100%; height: 100%;">
                 </a>
             </td>

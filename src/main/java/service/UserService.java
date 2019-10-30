@@ -50,4 +50,6 @@ public class UserService {
     public boolean hasId(int id) {
         return getUserDAO().hasId(id);
     }
+
+    public String getRole(String login, String password) {return getUserDAO().getRole(login, password);}
 }

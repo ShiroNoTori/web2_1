@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/userUpdate")
+@WebServlet("/admin/userUpdate")
 public class UpdateServlet extends HttpServlet {
 
     @Override
@@ -41,6 +41,6 @@ public class UpdateServlet extends HttpServlet {
 
         service.update(user);
 
-        response.sendRedirect("/_web_war_exploded/");
+        response.sendRedirect("/admin");
     }
 }

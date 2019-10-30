@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<form action="/_web_war_exploded/userAdd" method="post">
+<form action="/admin/userAdd" method="post">
     <label>
         Login
         <input type="text" name="login"/>

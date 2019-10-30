@@ -2,7 +2,7 @@ package factory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
+import java.util.*;
 
 public class UserDaoFactoryProducer {
 
@@ -17,10 +17,10 @@ public class UserDaoFactoryProducer {
         }
 
         /*switch (dao) {
-            case "jdbc": {
+            case "factory.UserDaoFactoryJDBC": {
                 return new UserDaoFactoryJDBC();
             }
-            case "hibernate": {
+            case "factory.UserDaoFactoryHibernate": {
                 return new UserDaoFactoryHibernate();
             }
             default: {

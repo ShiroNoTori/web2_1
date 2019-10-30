@@ -1,5 +1,6 @@
 package servlet;
 
+
 import model.User;
 import service.UserService;
 
@@ -12,9 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/index.jsp")
-public class IndexServlet extends HttpServlet {
-
+@WebServlet("/admin")
+public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserService service = UserService.getInstance();

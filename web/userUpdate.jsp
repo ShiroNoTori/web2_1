@@ -5,7 +5,7 @@
 </head>
 <body>
     <jsp:useBean id="user" scope="request" type="model.User"/>
-    <form action="/_web_war_exploded/userUpdate" method="post">
+    <form action="/admin/userUpdate" method="post">
         <input type="hidden" name="id" value="${user.id}">
         <label>
             Name
