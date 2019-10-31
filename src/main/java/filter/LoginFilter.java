@@ -1,4 +1,5 @@
-package servlet;
+package filter;
+
 
 import service.UserService;
 
@@ -8,8 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class RoleFilter implements Filter {
-
+public class LoginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -37,14 +37,6 @@ public class RoleFilter implements Filter {
                 }
             } else {
                 resp.sendRedirect("/");
-            }
-
-        } else {
-            String role = (String) session.getAttribute("role");
-            if (role.equals("user")) {
-                resp.sendRedirect("/user");
-            } else {
-                chain.doFilter(request, response);
             }
         }
     }
