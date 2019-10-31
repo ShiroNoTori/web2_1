@@ -51,5 +51,5 @@ public class UserService {
         return getUserDAO().hasId(id);
     }
 
-    public String getRole(String login, String password) {return getUserDAO().getRole(login, password);}
+    public User getUser(String login, String password) {return getUserDAO().getUser(login, password);}
 }

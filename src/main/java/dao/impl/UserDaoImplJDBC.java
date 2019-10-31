@@ -125,19 +125,25 @@ public class UserDaoImplJDBC implements UserDao {
     }
 
     @Override
-    public String getRole(String login, String password) {
-        String role = null;
-        try (PreparedStatement statement = connection.prepareStatement("select role from user where login = ? and password = ?")) {
+    public User getUser(String login, String password) {
+        User user = null;
+        try (PreparedStatement statement = connection.prepareStatement("select * from user where login = ? and password = ?")) {
             statement.setString(1, login);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
 
             resultSet.next();
-            role = resultSet.getString("role");
+            user = new User(
+                    resultSet.getString("role"),
+                    resultSet.getString("name"),
+                    resultSet.getString("password"),
+                    resultSet.getString("login")
+            );
+            user.setId(resultSet.getInt("id"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return role;
+        return user;
     }
 }

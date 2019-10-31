@@ -18,5 +18,5 @@ public interface UserDao {
 
     boolean hasId(int id);
 
-    String getRole(String login, String password);
+    User getUser(String login, String password);
 }

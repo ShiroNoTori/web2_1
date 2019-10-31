@@ -82,19 +82,19 @@ public class UserDaoImplHibernate implements UserDao {
     }
 
     @Override
-    public String getRole(String login, String password) {
-        String role = null;
+    public User getUser(String login, String password) {
+        User user = null;
 
-        Query query = session.createQuery("select role from User u where login =:login and password =:password");
+        Query query = session.createQuery("from User u where login =:login and password =:password");
         query.setParameter("login", login);
         query.setParameter("password", password);
 
         try {
-            role = (String) query.getSingleResult();
+            user = (User) query.getSingleResult();
         } catch (NoResultException ignored) {
         }
 
         session.close();
-        return role;
+        return user;
     }
 }

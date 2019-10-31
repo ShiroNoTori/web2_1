@@ -1,6 +1,7 @@
 package filter;
 
 
+import model.User;
 import service.UserService;
 
 import javax.servlet.*;
@@ -22,22 +23,9 @@ public class LoginFilter implements Filter {
         HttpSession session = req.getSession();
 
         if (session.getAttribute("role") == null) {
-            UserService service = UserService.getInstance();
-
-            String login = req.getParameter("login");
-            String password = req.getParameter("password");
-            String role = service.getRole(login, password);
-
-            if (role != null) {
-                session.setAttribute("role", role);
-                if (role.equals("admin")) {
-                    resp.sendRedirect("/admin");
-                } else if (role.equals("user")) {
-                    resp.sendRedirect("/user");
-                }
-            } else {
-                resp.sendRedirect("/");
-            }
+            resp.sendRedirect("/");
+        } else {
+            chain.doFilter(request, response);
         }
     }
 
