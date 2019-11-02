@@ -1,7 +1,5 @@
 package filter;
 
-import service.UserService;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+@WebFilter(urlPatterns = {"/admin/*"})
 public class AdminFilter implements Filter {
 
     @Override
@@ -22,10 +21,10 @@ public class AdminFilter implements Filter {
         HttpSession session = req.getSession();
 
         String role = (String) session.getAttribute("role");
-        if ("user".equals(role)) {
-            resp.sendRedirect("/user");
-        } else {
+        if ("admin".equals(role)) {
             chain.doFilter(request, response);
+        } else {
+            resp.sendRedirect("/user");
         }
     }
 

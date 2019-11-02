@@ -27,10 +27,13 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         User user = service.getUser(login, password);
 
+        String location = "/";
+
         if (user != null) {
             session.setAttribute("role", user.getRole());
-            String location = "/" + user.getRole();
-            response.sendRedirect(location);
+            location += user.getRole();
         }
+
+        response.sendRedirect(location);
     }
 }
