@@ -24,7 +24,7 @@ public class LoginFilter implements Filter {
         String role = (String) session.getAttribute("role");
 
         if (role == null) {
-            if (req.getRequestURI().startsWith("/auth")) {
+            if (req.getRequestURI().startsWith("/auth") || req.getRequestURI().equals("/")) {
                 chain.doFilter(request, response);
             } else {
                 resp.sendRedirect("/auth");
