@@ -21,14 +21,20 @@ public class LoginFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession();
 
-        if (session.getAttribute("role") == null) {
+        String role = (String) session.getAttribute("role");
+
+        if (role == null) {
             if (req.getRequestURI().startsWith("/auth")) {
                 chain.doFilter(request, response);
             } else {
                 resp.sendRedirect("/auth");
             }
         } else {
-            chain.doFilter(request, response);
+            if (req.getRequestURI().startsWith("/auth")) {
+                resp.sendRedirect("/" + role);
+            } else {
+                chain.doFilter(request, response);
+            }
         }
     }
 
